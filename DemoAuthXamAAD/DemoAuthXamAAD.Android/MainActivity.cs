@@ -6,6 +6,10 @@ using Android.Runtime;
 using Android.Views;
 using Android.Widget;
 using Android.OS;
+using Microsoft.Identity.Client;
+using Android.Content;
+using Microsoft.Identity.Client.Platforms.Android;
+using Microsoft.IdentityModel.Clients.ActiveDirectory;
 
 namespace DemoAuthXamAAD.Droid
 {
@@ -14,12 +18,21 @@ namespace DemoAuthXamAAD.Droid
     {
         protected override void OnCreate(Bundle savedInstanceState)
         {
-            TabLayoutResource = Resource.Layout.Tabbar;
-            ToolbarResource = Resource.Layout.Toolbar;
+
 
             base.OnCreate(savedInstanceState);
             global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
             LoadApplication(new App());
+            App.ParentWindow = this;
+            App._platformParameters = new PlatformParameters(this);
         }
+        
+
+        protected override void OnActivityResult(int requestCode, Result resultCode, Intent data)
+        {
+            base.OnActivityResult(requestCode, resultCode, data);
+            AuthenticationContinuationHelper.SetAuthenticationContinuationEventArgs(requestCode, resultCode, data);
+        }
+
     }
 }
